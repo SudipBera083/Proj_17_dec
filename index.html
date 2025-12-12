@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday, Srijita 🎂💬</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Pacifico&display=swap" />
+  <link rel="stylesheet" href="src/style/style.css" />
+</head>
+<body>
+
+  <!-- Floating hearts background -->
+  <div class="hearts" id="hearts"></div>
+
+  <!-- Confetti -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <main class="wrap">
+    <!-- Left: Hero / Intro -->
+    <section class="card">
+      <span class="badge">🎂 Birthday Chat • Made with 💖 by Sudip</span>
+      <h1 class="title">Happy Birthday, my favorite person, Srijita!</h1>
+      <p class="subtitle" id="typewriter"></p>
+
+      <div class="cta-row">
+        <button id="startChat" class="btn btn-primary">Start Chat 🎈</button>
+        <button id="confettiBtn" class="btn btn-ghost">Celebrate 🎉</button>
+        <button id="musicBtn" class="btn btn-ghost">Play Music ♫</button>
+        <button id="memoriesBtn" class="btn btn-ghost">Memories 📸</button>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="features">
+        <div class="feature"><span class="emoji">💬</span> Real-time style chat UI (plug your backend later)</div>
+        <div class="feature"><span class="emoji">✨</span> Confetti & floating hearts for the birthday vibe</div>
+        <div class="feature"><span class="emoji">📝</span> Typewriter intro message she’ll love</div>
+        <div class="feature"><span class="emoji">📱</span> Fully responsive—looks great on mobile</div>
+      </div>
+    </section>
+
+    <!-- Right: Chat Panel -->
+    <section class="chat" id="chatPanel" aria-hidden="true">
+      <header class="chat-header">
+        <div class="avatar" aria-hidden="true"></div>
+        <div>
+          <div class="chat-title">Sudip ❤️</div>
+          <div class="subtitle">Always online for Srijita</div>
+        </div>
+      </header>
+
+      <div class="chat-body" id="chatBody">
+        <div class="msg her">
+          Hey! Someone told me it’s a very special day today… 🥰
+          <div class="timestamp">Just now</div>
+        </div>
+        <div class="msg me">
+          It is! And I’ve built this little space just for you. 💌
+          <div class="timestamp">Just now</div>
+        </div>
+      </div>
+
+      <form class="chat-input" id="chatForm">
+        <input id="chatText" type="text" placeholder="Type a sweet message…" aria-label="Message" disabled />
+        <button id="sendBtn" type="submit" disabled>Send</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="credit">Made with love • #celebrate again</a></div>
+  </footer>
+
+  <!-- Optional: add your own mp3 file in the same folder and rename to birthday.mp3 -->
+  <audio id="bgm" loop>
+    <source src="src/audio/birthday.mp3" type="audio/mpeg" />
+  </audio>
+  <script src="src/script/script.js"></script>
+</body>
+
+</html>

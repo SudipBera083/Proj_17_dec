@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Memories • Srijita & Sudip 💞</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Pacifico&display=swap" />
+  <link rel="stylesheet" href="./src/style/memories.css" />
+  </head>
+<body>
+
+  <header>
+    <div class="nav">
+      <div class="brand">Memories with Srijita 💖</div>
+      <div class="nav-right">
+        <button class="btn" id="slideshowBtn">Slideshow ▶️</button>
+        <a href="index.html" class="btn" style="text-decoration: none;">Back to Home </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <section class="filters">
+    <div class="chip active" data-tag="all">All</div>
+    <div class="chip" data-tag="us">Us ❤️</div>
+    <div class="chip" data-tag="trip">Trips ✈️</div>
+    <div class="chip" data-tag="food">Food 🍰</div>
+    <div class="chip" data-tag="gift">Gifts 🎁</div>
+    <div class="chip" data-tag="cute">Cute 🐼</div>
+    <div class="search"><input id="searchBox" type="search" placeholder="Search caption, place, date…" /></div>
+  </section>
+
+  <!-- Upload (Optional, LocalStorage only) -->
+  <section class="upload" id="uploadPanel">
+    <div class="panel">
+      <h3 style="margin:6px 0 10px">Add a new memory</h3>
+      <label for="fileInput">Photo (PNG/JPG)</label>
+      <input id="fileInput" type="file" accept="image/*">
+      <label for="titleInput">Title</label>
+      <input id="titleInput" type="text" placeholder="e.g., Your smile at Cubbon Park">
+      <label for="dateInput">Date</label>
+      <input id="dateInput" type="date">
+      <label for="tagsInput">Tag</label>
+      <select id="tagsInput">
+        <option value="us">Us ❤️</option>
+        <option value="trip">Trips ✈️</option>
+        <option value="food">Food 🍰</option>
+        <option value="gift">Gifts 🎁</option>
+        <option value="cute">Cute 🐼</option>
+      </select>
+      <label for="captionInput">Caption / Story</label>
+      <textarea id="captionInput" rows="3" placeholder="Write your sweet memory here…"></textarea>
+      <button class="btn-primary" id="saveMemory">Save Memory 💾</button>
+      <p style="color:#a9aec9; margin-top:6px">Note: Uploaded photos are stored locally in the browser and not synced to a server.</p>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <main class="grid" id="grid"></main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-inner">
+      <div class="lightbox-toolbar">
+        <div class="lb-title" id="lbTitle">Memory</div>
+        <div class="lb-actions">
+          <button id="lbPrev">⟨ Prev</button>
+          <button id="lbNext">Next ⟩</button>
+          <button id="lbFav">❤️ Favorite</button>
+          <button id="lbClose">✖ Close</button>
+        </div>
+      </div>
+      <div class="lb-media">
+        <img id="lbImg" alt="Memory photo">
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Made with love • #celebrate again</a>
+  </footer>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas" style="position:fixed; inset:0; pointer-events:none; z-index:2;"></canvas>
+    <script src="./src/script/memories.js"></script>
+  </body>
+</html>
