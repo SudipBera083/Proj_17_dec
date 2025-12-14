@@ -4,86 +4,420 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Our Memories • Srijita & Sudip 💞</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Pacifico&display=swap" />
-  <link rel="stylesheet" href="./src/style/memories.css" />
-  </head>
+  <title>Our Memories • Srijita &amp; Sudip 💞</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Pacifico&display=swap" rel="stylesheet">
+
+  <!-- Page Styles (embedded, no external CSS/JS needed) -->
+  <style>
+    /* -------- Design Tokens -------- */
+    :root{
+      --bg: #0d1020;
+      --panel: #141731;
+      --panel-2: #1a1f3f;
+      --text: #e8ebff;
+      --muted: #a7afd9;
+      --accent: #ff6ec7;
+      --accent-2: #8ef6ff;
+      --chip-bg: #23264d;
+      --chip-active: #3a3f7a;
+      --shadow: 0 8px 28px rgba(0,0,0,0.35);
+      --radius: 16px;
+    }
+
+    /* -------- Reset / Base -------- */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 20% -10%, #12163a 0%, #0d1020 60%) fixed;
+      color: var(--text);
+      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display:block; max-width:100%; height:auto; }
+
+    /* -------- Header / Nav -------- */
+    header{
+      position: sticky; top:0; z-index: 3;
+      background: linear-gradient(180deg, rgba(13,16,32,0.9), rgba(13,16,32,0.75));
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand{
+      font-family:"Pacifico", cursive;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+    .nav-right { display:flex; gap:10px; align-items:center; }
+    .btn{
+      padding:10px 14px;
+      background: var(--chip-bg);
+      color: var(--text);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform .08s ease, background .2s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); background: var(--chip-active); }
+
+    /* -------- Chips (decorative here—no JS filters) -------- */
+    .filters{
+      max-width: 1100px;
+      margin: 10px auto 0;
+      padding: 12px 18px;
+      display:flex; flex-wrap: wrap; gap:10px;
+    }
+    .chip{
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--chip-bg);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .chip.active{ background: var(--chip-active); color: var(--text); }
+
+    /* -------- Grid / Cards -------- */
+    .grid{
+      max-width: 1100px;
+      margin: 18px auto 60px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+    .card{
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .cover{
+      position: relative;
+      aspect-ratio: 4 / 3;             /* Consistent tile ratio */
+      overflow: hidden;
+      background: var(--panel-2);
+    }
+    .cover img{
+      width: 100%; height: 100%;
+      object-fit: cover;                /* Fill tile without letterboxing */
+      object-position: var(--focus-x, 50%) var(--focus-y, 50%); /* Per-photo focal point */
+      transform: scale(var(--zoom, 1)); /* Tiny adjustable zoom to avoid edge crops */
+    }
+
+    /* Tag badges + fav icon (non-functional) */
+    .tag-badge{
+      position: absolute; left: 10px; top: 10px;
+      display:flex; gap:6px; flex-wrap:wrap;
+    }
+    .tag{
+      font-size: 0.8rem;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      padding: 6px 8px;
+      border-radius: 999px;
+      backdrop-filter: blur(2px);
+    }
+    .fav{
+      position:absolute; right:10px; top:10px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #ff7aa2;
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+
+    .content{ padding: 14px; }
+    .title{ font-weight: 700; margin-bottom: 6px; }
+    .meta{ font-size: 0.92rem; color: var(--muted); margin-bottom: 8px; }
+    .caption{ color: var(--text); }
+
+    /* -------- CSS-only Lightbox -------- */
+    .lb{
+      position: fixed; inset: 0; z-index: 5;
+      display: none;
+      place-items: center;
+      background: rgba(9, 11, 24, 0.75);
+      backdrop-filter: blur(6px);
+    }
+    .lb:target{ display: grid; }
+
+    .lb-inner{
+      width: min(900px, 92vw);
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .lb-toolbar{
+      display:flex; justify-content:space-between; align-items:center;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(26,31,63,0.7), rgba(20,23,49,0.7));
+    }
+    .lb-title{ font-weight: 600; }
+    .lb-actions{ display:flex; gap:10px; }
+    .lb-actions a{
+      padding: 8px 12px; border-radius: 10px; background: var(--chip-bg);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .lb-media{
+      aspect-ratio: 4 / 3; background: var(--panel-2);
+    }
+    .lb-media img{
+      width: 100%; height: 100%;
+      object-fit: contain;            /* Show entire photo in lightbox */
+      object-position: 50% 50%;
+      background: #0d1020;
+    }
+    .lb-caption{
+      padding: 12px 14px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: var(--muted);
+    }
+
+    /* -------- Footer -------- */
+    footer{
+      max-width: 1100px;
+      margin: 0 auto 40px;
+      padding: 0 18px;
+      color: var(--muted);
+    }
+
+    /* -------- Helper Classes (optional) -------- */
+    .focus-top     { --focus-y: 15%; }
+    .focus-center  { --focus-y: 50%; }
+    .focus-bottom  { --focus-y: 85%; }
+    .focus-left    { --focus-x: 15%; }
+    .focus-right   { --focus-x: 85%; }
+    .zoom-102      { --zoom: 1.02; }
+    .zoom-104      { --zoom: 1.04; }
+    .zoom-106      { --zoom: 1.06; }
+
+    /* Responsive tweak: tighten grid on narrow viewports */
+    @media (max-width: 460px){
+      .grid{ gap: 14px; }
+      .tag{ font-size: 0.75rem; }
+    }
+  </style>
+</head>
 <body>
 
+  <!-- Header -->
   <header>
     <div class="nav">
       <div class="brand">Memories with Srijita 💖</div>
       <div class="nav-right">
-        <button class="btn" id="slideshowBtn">Slideshow ▶️</button>
-        <a href="index.html" class="btn" style="text-decoration: none;">Back to Home </a>
+        <!-- Decorative; left active but no JS is needed -->
+         <a href="index.html">Back to Home</a>
       </div>
     </div>
   </header>
 
-  <!-- Filters -->
-  <section class="filters">
-    <div class="chip active" data-tag="all">All</div>
-    <div class="chip" data-tag="us">Us ❤️</div>
-    <div class="chip" data-tag="trip">Trips ✈️</div>
-    <div class="chip" data-tag="food">Food 🍰</div>
-    <div class="chip" data-tag="gift">Gifts 🎁</div>
-    <div class="chip" data-tag="cute">Cute 🐼</div>
-    <div class="search"><input id="searchBox" type="search" placeholder="Search caption, place, date…" /></div>
-  </section>
-
-  <!-- Upload (Optional, LocalStorage only) -->
-  <section class="upload" id="uploadPanel">
-    <div class="panel">
-      <h3 style="margin:6px 0 10px">Add a new memory</h3>
-      <label for="fileInput">Photo (PNG/JPG)</label>
-      <input id="fileInput" type="file" accept="image/*">
-      <label for="titleInput">Title</label>
-      <input id="titleInput" type="text" placeholder="e.g., Your smile at Cubbon Park">
-      <label for="dateInput">Date</label>
-      <input id="dateInput" type="date">
-      <label for="tagsInput">Tag</label>
-      <select id="tagsInput">
-        <option value="us">Us ❤️</option>
-        <option value="trip">Trips ✈️</option>
-        <option value="food">Food 🍰</option>
-        <option value="gift">Gifts 🎁</option>
-        <option value="cute">Cute 🐼</option>
-      </select>
-      <label for="captionInput">Caption / Story</label>
-      <textarea id="captionInput" rows="3" placeholder="Write your sweet memory here…"></textarea>
-      <button class="btn-primary" id="saveMemory">Save Memory 💾</button>
-      <p style="color:#a9aec9; margin-top:6px">Note: Uploaded photos are stored locally in the browser and not synced to a server.</p>
-    </div>
+  <!-- Decorative chips (no JS filters in this build) -->
+  <section class="filters" aria-label="Categories">
+    <div class="chip active">All</div>
+    <div class="chip">Us ❤️</div>
+    <div class="chip">Trips ✈️</div>
+    <div class="chip">Food 🍰</div>
+    <div class="chip">Gifts 🎁</div>
+    <div class="chip">Cute 🐼</div>
   </section>
 
   <!-- Gallery -->
-  <main class="grid" id="grid"></main>
+  <main class="grid" id="grid">
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-    <div class="lightbox-inner">
-      <div class="lightbox-toolbar">
-        <div class="lb-title" id="lbTitle">Memory</div>
+    <!-- Card 1 -->
+    <article class="card" data-id="m1" data-tags="us,cute">
+      <a href="#m1" class="cover" aria-label="Cubbon Park giggles">
+        <img src="src/img/cubbon.jpg" alt="Cubbon Park giggles"
+             style="--focus-x:50%; --focus-y:55%;">
+        <div class="tag-badge">
+          <span class="tag">Us ❤️</span><span class="tag">Cute 🐼</span>
+        </div>
+        <span class="fav" aria-hidden="true">❤️</span>
+      </a>
+      <div class="content">
+        <div class="title">Cubbon Park giggles</div>
+        <div class="meta">2024-03-17</div>
+        <div class="caption">You laughed so hard I forgot the world 🌿💚</div>
+      </div>
+    </article>
+
+    <!-- Card 2 -->
+    <article class="card" data-id="m2" data-tags="trip,us">
+      <a href="#m2" class="cover" aria-label="Goa sunset promises">
+        <img src="src/img/goa.jpg" alt="Goa sunset promises"
+             style="--focus-x:50%; --focus-y:55%;">
+        <div class="tag-badge">
+          <span class="tag">Us ❤️</span>
+        </div>
+        <span class="fav" aria-hidden="true">❤️</span>
+      </a>
+      <div class="content">
+        <div class="title">Goa sunset promises</div>
+        <div class="meta">2023-12-02</div>
+        <div class="caption">We held hands and time slowed by the sea 🌅</div>
+      </div>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="card" data-id="m3" data-tags="food,trip">
+      <a href="#m3" class="cover" aria-label="Street food adventure">
+        <img src="src/img/streetfood.jpg" alt="Street food adventure"
+             style="--focus-x:50%; --focus-y:55%;">
+        <div class="tag-badge">
+          <span class="tag">Food 🍰</span><span class="tag">Trips ✈️</span>
+        </div>
+        <span class="fav" aria-hidden="true">❤️</span>
+      </a>
+      <div class="content">
+        <div class="title">Street food adventure</div>
+        <div class="meta">2024-04-21</div>
+        <div class="caption">Spicy pani puri + your happy dance = perfect 🥳</div>
+      </div>
+    </article>
+
+    <!-- Card 4 -->
+    <article class="card" data-id="m4" data-tags="food,us">
+      <a href="#m4" class="cover" aria-label="Coffee that tasted like love">
+        <img src="src/img/coffee.jpg" alt="Coffee that tasted like love"
+             style="--focus-x:50%; --focus-y:55%;">
+        <div class="tag-badge">
+          <span class="tag">Us ❤️</span>
+        </div>
+        <span class="fav" aria-hidden="true">❤️</span>
+      </a>
+      <div class="content">
+        <div class="title">Coffee that tasted like love</div>
+        <div class="meta">2024-08-09</div>
+        <div class="caption">Your ‘one more sip’ smile—unbeatable ☕💕</div>
+      </div>
+    </article>
+
+    <!-- Card 5 -->
+    <article class="card" data-id="m5" data-tags="gift,cute">
+      <a href="#m5" class="cover" aria-label="The little handmade gift">
+        <img src="src/img/gift.jpg" alt="The little handmade gift"
+             style="--focus-x:50%; --focus-y:55%;">
+        <div class="tag-badge">
+          <span class="tag">Cute 🐼</span>
+        </div>
+        <span class="fav" aria-hidden="true">❤️</span>
+      </a>
+      <div class="content">
+        <div class="title">The little handmade gift</div>
+        <div class="meta">2025-01-26</div>
+        <div class="caption">Your craft, your care, your heart—everything ✨</div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- CSS-only Lightboxes (1 per card) -->
+  <section id="m1" class="lb" aria-hidden="true">
+    <div class="lb-inner">
+      <div class="lb-toolbar">
+        <div class="lb-title">Cubbon Park giggles · 2024-03-17</div>
         <div class="lb-actions">
-          <button id="lbPrev">⟨ Prev</button>
-          <button id="lbNext">Next ⟩</button>
-          <button id="lbFav">❤️ Favorite</button>
-          <button id="lbClose">✖ Close</button>
+          <a href="#m5" class="lb-nav" aria-label="Previous: The little handmade gift">⟨ Prev</a>
+          <a href="#m2" class="lb-nav" aria-label="Next: Goa sunset promises">Next ⟩</a>
+          <a href="#close" class="lb-nav" aria-label="Close">✖ Close</a>
         </div>
       </div>
       <div class="lb-media">
-        <img id="lbImg" alt="Memory photo">
-      </div>
+        <img src="src/img/cubbon.jpg" alt="Cubbon Park giggles"
+             style="--focus-x:50%; --focus-y:55%;">
+        <div class="lb-caption">You laughed so hard I forgot the world 🌿💚</div>
     </div>
-  </div>
+  </section>
 
+  <section id="m2" class="lb" aria-hidden="true">
+    <div class="lb-inner">
+      <div class="lb-toolbar">
+        <div class="lb-title">Goa sunset promises · 2023-12-02</div>
+        <div class="lb-actions">
+          <a href="#m1" class="lb-nav" aria-label="Previous: Cubbon Park giggles">⟨ Prev</a>
+          <a href="#m3" class="lb-nav" aria-label="Next: Street food adventure">Next ⟩</a>
+          <a href="#close" class="lb-nav" aria-label="Close">✖ Close</a>
+        </div>
+      </div>
+      <div class="lb-media">
+        <img src="src/img/goa.jpg" alt="Goa sunset promises"
+             style="--focus-x:50%; --focus-y:55%;">
+        <div class="lb-caption">We held hands and time slowed by the sea 🌅</div>
+    </div>
+  </section>
+
+  <section id="m3" class="lb" aria-hidden="true">
+    <div class="lb-inner">
+      <div class="lb-toolbar">
+        <div class="lb-title">Street food adventure · 2024-04-21</div>
+        <div class="lb-actions">
+          <a href="#m2" class="lb-nav" aria-label="Previous: Goa sunset promises">⟨ Prev</a>
+          <a href="#m4" class="lb-nav" aria-label="Next: Coffee that tasted like love">Next ⟩</a>
+          <a href="#close" class="lb-nav" aria-label="Close">✖ Close</a>
+        </div>
+      </div>
+      <div class="lb-media">
+        <img src="src/img/streetfood.jpg" alt="Street food adventure"
+             style="--focus-x:50%; --focus-y:55%;">
+      </div>
+      <div class="lb-caption">Spicy pani puri + your happy dance = perfect 🥳</div>
+    </div>
+  </section>
+
+  <section id="m4" class="lb" aria-hidden="true">
+    <div class="lb-inner">
+      <div class="lb-toolbar">
+        <div class="lb-title">Coffee that tasted like love · 2024-08-09</div>
+        <div class="lb-actions">
+          <a href="#m3" class="lb-nav" aria-label="Previous: Street food adventure">⟨ Prev</a>
+          <a href="#m5" class="lb-nav" aria-label="Next: The little handmade gift">Next ⟩</a>
+          <a href="#close" class="lb-nav" aria-label="Close">✖ Close</a>
+        </div>
+      </div>
+      <div class="lb-media">
+        <img src="src/img/coffee.jpg" alt="Coffee that tasted like love"
+             style="--focus-x:50%; --focus-y:55%;">
+      </div>
+      <div class="lb-caption">Your ‘one more sip’ smile—unbeatable ☕💕</div>
+    </div>
+  </section>
+
+  <section id="m5" class="lb" aria-hidden="true">
+    <div class="lb-inner">
+      <div class="lb-toolbar">
+        <div class="lb-title">The little handmade gift · 2025-01-26</div>
+        <div class="lb-actions">
+          <a href="#m4" class="lb-nav" aria-label="Previous: Coffee that tasted like love">⟨ Prev</a>
+          <a href="#m1" class="lb-nav" aria-label="Next: Cubbon Park giggles">Next ⟩</a>
+          <a href="#close" class="lb-nav" aria-label="Close">✖ Close</a>
+        </div>
+      </div>
+      <div class="lb-media">
+        <img src="src/img/gift.jpg" alt="The little handmade gift"
+             style="--focus-x:50%; --focus-y:55%;">
+      </div>
+      <div class="lb-caption">Your craft, your care, your heart—everything ✨</div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer>
-    Made with love • #celebrate again</a>
+    Made with love • #celebrate again
   </footer>
-
-  <!-- Confetti Canvas -->
-  <canvas id="confettiCanvas" style="position:fixed; inset:0; pointer-events:none; z-index:2;"></canvas>
-    <script src="./src/script/memories.js"></script>
-  </body>
+</body>
 </html>
+
